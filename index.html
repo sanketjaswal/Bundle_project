@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Boxes</title>
+    <link rel="stylesheet" href="index.css">
+    <style>
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.box {
+    width: 350px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #797979;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 10px 20px;
+}
+
+
+input[type="radio"]:checked + label {
+    font-weight: bold;
+    color: red;
+}
+
+.box.expanded {
+    height: 200px;
+    background-color: #e0e0e0;
+}
+
+.options {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-inline: auto;
+    width: fit-content;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    animation-name: fadeIn;
+    animation-duration: 1s;
+}
+
+.box.expanded .options {
+    display: flex;
+}
+
+.option {
+    margin: 5px 0;
+    cursor: pointer;
+}
+
+.radio-container{
+    background-color: red;
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.data-divided{
+    width: 50%;
+    border: 1px solid green;
+}
+
+.age-label{
+    accent-color: red;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <label for="age1" class="age-label">
+            <div id="box1" class="box">
+                <input type="radio" id="age1" name="age" value="30">
+                <div class="radio-container">
+                    <div class="data-divided">
+                        1
+                    </div>
+                    <div class="data-divided">
+                        2
+                    </div>
+                </div>
+            </div>
+        </label>
+        <label for="age2">
+            <div id="box2" class="box">
+                <input type="radio" id="age2" name="age" value="60">
+                Box 2
+            </div>
+        </label>
+        <label for="age3">
+            <div id="box3" class="box">
+                <input type="radio" id="age3" name="age" value="100">
+                Box 3
+            </div>
+        </label>
+    </div>
+
+    <script>
+        const boxes = document.querySelectorAll('.box');
+
+boxes.forEach((box) => {
+  // Create options for each box
+  const optionsDiv = document.createElement('div');
+  optionsDiv.classList.add('options');
+  optionsDiv.innerHTML = `
+    <div class="option" data-color="#FF5733">Color: Red</div>
+    <div class="option" data-color="#33FF57">Color: Green</div>
+    <div class="option" data-color="#3357FF">Color: Blue</div>
+    <div class="option" data-size="small">Size: Small</div>
+    <div class="option" data-size="medium">Size: Medium</div>
+    <div class="option" data-size="large">Size: Large</div>
+  `;
+  box.appendChild(optionsDiv);
+
+  // Expand/collapse box on click
+  box.addEventListener('click', (e) => {
+    // Prevent radio button clicks from propagating
+    if (e.target.tagName.toLowerCase() === 'input') {
+      return;
+    }
+    box.classList.toggle('expanded');
+  });
+
+  // Handle option clicks
+  optionsDiv.addEventListener('click', (e) => {
+    const target = e.target;
+
+    if (target.classList.contains('option')) {
+      const color = target.dataset.color;
+      const size = target.dataset.size;
+
+      if (color) {
+        box.style.backgroundColor = color;
+      }
+
+      if (size) {
+        switch (size) {
+          case 'small':
+            box.style.width = '150px';
+            break;
+          case 'medium':
+            box.style.width = '200px';
+            break;
+          case 'large':
+            box.style.width = '250px';
+            break;
+        }
+      }
+    }
+  });
+});
+
+    </script>
+
+</body>
+
+</html>
